@@ -14,6 +14,21 @@ Milk's API, here:
 http://code.google.com/p/rtmapi/
 
 Tested with r15 of the code, current from 2010-06-20
+
+TODO: This script ignores Things's "Focus" groups Inbox, Next, Scheduled,
+Someday -- all tasks are added to Remember The Milk in their proper project,
+or in the Inbox.  Perhaps a Things task that's not in a project can go into
+a Next, Scheduled, or Someday RTM list?  Or perhaps the Focus concept should
+be left behind when importing into RTM.
+
+TODO: This script thinks Things projects are tasks, and puts them in the RTM
+Inbox.
+
+TODO: Use the Things tags High, Medium, Low to set tasks' priorities in RTM
+to 1, 2, or 3.
+
+TODO: Replace spaces with underscores in Things tags, otherwise RTM thinks
+they're multiple tags.
 """
 
 from __future__ import print_function
@@ -222,6 +237,7 @@ rsp = rtm.timelines.create()
 timeline = rsp.find('timeline').text
 
 for db_object in db_objects:
+    # TODO: skip tasks that are actually Things projects!
     if db_object.type == 'TODO' and db_object.valid() and not db_object.deleted:
         if db_object.title in name2taskseries_id:
             print("Skipping task %s: Already in Remember the Milk" % (
